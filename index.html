@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mejóralo · Comparativa</title>
+  <style>
+    :root{
+      /* Brand */
+      --brand-orange:#FF7900;
+      --brand-white:#FFFFFF;
+      --brand-black:#000000;
+
+      /* UI */
+      --ink:#1e2a2f;
+      --muted:#7a8790;
+      --line:#e8edf0;
+      --soft:#f3f5f7;
+      --soft-2:#f7f9fb;
+      --shadow:0 14px 40px rgba(0,0,0,.10);
+      --shadow-soft:0 10px 30px rgba(0,0,0,.08);
+
+      /* Redaction (modo “vacío”) */
+      --redact-blue:#0aa0d8;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:var(--brand-white);
+      color:var(--ink);
+      font-family: "Dubai","Tw Cen MT","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+    }
+
+    .page{
+      min-height:100vh;
+      padding:28px 16px 40px;
+      display:flex;
+      justify-content:center;
+    }
+
+    .wrap{
+      width:min(940px, 100%);
+    }
+
+    /* Logo */
+    .brand{
+      display:flex;
+      justify-content:center;
+      margin:10px 0 18px;
+    }
+    .logo{
+      width: 420px;          /* ajusta a tu gusto */
+      height: 90px;          /* ajusta a tu gusto */
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+     /* La imagen se escala sin deformarse y queda centrada */
+    .logo-img{
+      max-width:100%;
+      max-height:100%;
+      width:auto;
+      height:auto;
+      display:block;
+      object-fit:contain;    /* clave: no se deforma */
+    }
+    .logo-word{
+      font-size:58px;
+      font-weight:900;
+      letter-spacing:-1px;
+      color:var(--ink);
+      line-height:1;
+    }
+    .logo-sun{
+      position:relative;
+      width:34px;
+      height:34px;
+      margin-bottom:8px;
+    }
+    .logo-sun::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:50%;
+      background:var(--brand-orange);
+      filter:saturate(1.05);
+    }
+    .logo-sun i{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:10px;
+      height:28px;
+      background:var(--brand-orange);
+      border-radius:999px;
+      transform-origin:50% 22px;
+      filter:saturate(1.05);
+    }
+    .logo-sun i:nth-child(1){ transform:translate(-50%,-50%) rotate(0deg); }
+    .logo-sun i:nth-child(2){ transform:translate(-50%,-50%) rotate(45deg); }
+    .logo-sun i:nth-child(3){ transform:translate(-50%,-50%) rotate(90deg); }
+    .logo-sun i:nth-child(4){ transform:translate(-50%,-50%) rotate(135deg); }
+    .logo-sun::after{
+      content:"";
+      position:absolute;
+      inset:8px;
+      border-radius:50%;
+      background:var(--brand-white);
+    }
+
+    /* Pills */
+    .meta{
+      display:grid;
+      gap:10px;
+      margin:8px auto 18px;
+    }
+
+   .pill{
+      background:linear-gradient(#f7f8fa, #eef1f4);
+      border-radius:999px;
+      padding:14px 18px;
+      box-shadow:0 10px 22px rgba(0,0,0,.08);
+      overflow:hidden;
+
+      position:relative;
+      display:grid;
+      grid-template-columns:1fr 1fr; /* 50% / 50% exacto */
+      align-items:center;
+    }
+    .pill .label{
+      font-size:18px;
+      font-weight:600;
+      color:var(--ink);
+      white-space:nowrap;
+    }
+    .pill .divider{
+      width:1px;
+      height:18px;
+      background:#dfe6ea;
+      flex:0 0 auto;
+      opacity:.95;
+    }
+    /* Línea justo en la mitad */
+    .pill::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      width:1px;
+      height:18px;
+      background:#dfe6ea;
+      opacity:.95;
+      pointer-events:none;
+    }
+
+    /* Contenido pegado a la mitad (para que empiece “desde el centro”) */
+    .pill-left{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding-right:18px;
+      white-space:nowrap;
+      min-width:0;
+    }
+    .pill-right{
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      gap:16px;
+      padding-left:18px;
+      white-space:nowrap;
+      min-width:0;
+    }
+
+    .pipe{
+      color:#9aa6ae;
+      font-weight:900;
+      line-height:1;
+      transform:translateY(1px);
+      flex:0 0 auto;
+    }
+
+    /* Summary block */
+    .summary{
+      position:relative;
+      margin:10px 0 18px;
+    }
+    .cards{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    .card{
+      border-radius:18px;
+      box-shadow:var(--shadow-soft);
+      background:var(--brand-white);
+      padding:24px 22px 30px;
+      border:1px solid #eef2f5;
+      min-height:160px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      text-align:center;
+    }
+    .card-title{
+      font-weight:900;
+      letter-spacing:.8px;
+      text-transform:uppercase;
+      color:var(--ink);
+      font-size:18px;
+      margin-bottom:10px;
+    }
+    .card-value{
+      font-weight:900;
+      font-size:62px;
+      line-height:1;
+      letter-spacing:-1px;
+    }
+
+    .card--right{
+      border:2px solid rgba(255,121,0,.35);
+      background:linear-gradient(180deg, #fff7ef 0%, #fffaf6 100%);
+    }
+
+    .savings-bar{
+      position:relative;
+      z-index:3;
+      margin:-26px 10px 10px;
+      background:var(--brand-orange);
+      border-radius:999px;
+      padding:14px 18px;
+      box-shadow:0 14px 34px rgba(255,121,0,.35);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      text-transform:uppercase;
+      color:var(--brand-white);
+      letter-spacing:.6px;
+      font-weight:900;
+      flex-wrap:wrap;
+    }
+    .savings-label{
+      font-size:18px;
+      opacity:.98;
+      white-space:nowrap;
+    }
+    .savings-amount{
+      font-size:38px;
+      line-height:1;
+      white-space:nowrap;
+    }
+
+    .annual{
+      text-align:center;
+      margin:8px 0 0;
+      font-weight:900;
+      letter-spacing:.7px;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-size:16px;
+    }
+    .annual b{ color:var(--ink); }
+    .annual .muted{ color:var(--muted); font-weight:900; }
+
+    /* Details */
+    .details{
+      margin-top:18px;
+      padding:4px 6px 0;
+    }
+
+    .section{
+      margin:18px 0 10px;
+    }
+
+    .section-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:14px;
+      padding:0 6px 6px;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:22px;
+      font-weight:1000;
+      letter-spacing:.4px;
+    }
+   
+    .cols-head{
+      display:grid;
+      grid-template-columns: 120px 120px;
+      justify-items:end;
+      gap:26px;
+      color:#96a3ab;
+      font-weight:1000;
+      letter-spacing:.9px;
+      text-transform:uppercase;
+      font-size:14px;
+      padding-right:4px;
+    }
+
+    .rows{
+      border-top:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
+      border-radius:14px;
+      padding:0 12px;
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:14px 2px;
+      border-bottom:1px solid var(--line);
+    }
+    .row:last-child{ border-bottom:none; }
+
+    .row-left{
+      min-width:0;
+    }
+    .row-key{
+      font-weight:1000;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+      margin-right:10px;
+      white-space:nowrap;
+    }
+    .row-formula{
+      color:#39474e;
+      font-weight:700;
+      letter-spacing:.2px;
+      font-size:16px;
+      white-space:nowrap;
+    }
+
+    .row-right{
+      display:grid;
+      grid-template-columns: 120px 120px;
+      justify-items:end;
+      gap:26px;
+      font-weight:1000;
+      font-size:20px;
+      letter-spacing:.2px;
+      flex:0 0 auto;
+    }
+
+    /* Energy layout */
+    .rows--energy .row{
+      display:grid;
+      grid-template-columns: 70px 1fr 120px;
+      align-items:center;
+    }
+    .energy-mid{
+      color:#39474e;
+      font-weight:800;
+      font-size:16px;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .energy-total{
+      justify-self:end;
+      font-weight:1000;
+      font-size:20px;
+    }
+    .pipe{
+      opacity:.45;
+      margin:0 10px;
+    }
+
+    /* Simple list rows (otros / impuestos) */
+    .rows--simple .row{
+      display:flex;
+      justify-content:space-between;
+    }
+    .simple-left{
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+      color:#39474e;
+    }
+    .simple-right{
+      font-weight:1000;
+      font-size:20px;
+    }
+
+    /* Total */
+    .total{
+      margin:18px 6px 0;
+      display:flex;
+      justify-content:flex-end;
+    }
+    .total-box{
+      width:min(520px, 100%);
+      padding-top:10px;
+      border-top:2px solid rgba(255,121,0,.55);
+      display:flex;
+      justify-content:flex-end;
+      gap:12px;
+      align-items:baseline;
+      color:var(--brand-orange);
+      font-weight:1000;
+      text-transform:uppercase;
+      letter-spacing:.9px;
+    }
+    .total-box .amount{
+      color:var(--ink);
+      font-size:24px;
+      letter-spacing:.2px;
+      text-transform:none;
+    }
+
+    /* 1) Si NO hay periodo: ocultar bloque Periodo y adaptar pill */
+    body[data-has-period="false"] #periodoGroup { display: none; }
+    body[data-has-period="false"] .pill::after { display: none; }
+    
+
+    /* 2) Si NO hay tramos: ocultar P2 y P3 */
+    body[data-has-tramos="false"] #rowEP2,
+    body[data-has-tramos="false"] #rowEP3 {
+      display: none;
+    }
+
+  </style>
+</head>
+
+<body class="page" data-has-period="true" data-has-tramos="true">
+  <div class="wrap">
+
+    <header class="brand">
+      <div class="logo" aria-label="Mejóralo">
+        <img class="logo-img" src="logo_mejoralo_recortado.png" alt="mejoralo" />
+      </div>
+    </header>
+
+    <section class="meta" aria-label="Datos del periodo y potencia">
+
+     <div class="pill">
+        <div class="pill-left">
+          <span id="periodoGroup">
+            <span class="label">Periodo:</span>
+            <span class="redactable" id="periodo" style="--w:190px">19/10/2025 - 17/11/2025</span>
+          </span>
+        </div>
+        <div class="pill-right">
+          <span class="label">Días facturados:</span>
+          <span class="redactable" id="diasFacturados" style="--w:44px">30</span>
+        </div>
+      </div>
+
+      <div class="pill">
+        <div class="pill-left">
+          <span class="label">Potencia contratada</span>
+        </div>
+        <div class="pill-right">
+          <span class="label">Punta</span>
+          <span class="redactable" id="potenciaPunta" style="--w:86px">5,75 kW</span>
+          <span class="divider" aria-hidden="true"></span>
+          <span class="label">Valle</span>
+          <span class="redactable" id="potenciaValle" style="--w:86px">5,75 kW</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="summary" aria-label="Resumen comparativa">
+      <div class="cards">
+        <div class="card card--left">
+          <div class="card-title">Factura actual</div>
+          <div class="card-value">
+            <span class="redactable big" id="facturaActual" style="--w:220px">119,78€</span>
+          </div>
+        </div>
+
+        <div class="card card--right">
+          <div class="card-title">Con esta tarifa</div>
+          <div class="card-value">
+            <span class="redactable big" id="facturaConTarifa" style="--w:200px">86,84€</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="savings-bar" role="note" aria-label="Ahorro estimado en esta factura">
+        <span class="savings-label">Ahorro estimado en esta factura</span>
+        <span class="savings-amount redactable" id="ahorroFactura" style="--w:140px">32,94€</span>
+      </div>
+
+      <div class="annual">
+        <span>Ahorro estimado anual </span>
+        <b><span class="redactable" id="ahorroAnual" style="--w:140px">395,28€</span></b>
+        <span class="muted"> (</span>
+        <b><span class="redactable" id="ahorroPorcentaje" style="--w:72px">28%</span></b>
+        <span class="muted">)</span>
+      </div>
+    </section>
+
+    <section class="details" aria-label="Detalle de la tarifa">
+
+      <!-- POTENCIA -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title"><span>POTENCIA</span></div>
+          <div class="cols-head" aria-hidden="true">
+            <span>Cantidad</span>
+            <span>Precio</span>
+          </div>
+        </div>
+
+        <div class="rows">
+          <div class="row">
+            <div class="row-left">
+              <span class="row-key">P. Punta</span>
+              <span class="row-formula">
+                <span class="redactable" id="pPuntaKw" style="--w:54px">5,75</span> kW ×
+                <span class="redactable" id="pPuntaDias" style="--w:44px">30</span> días ×
+                <span class="redactable" id="pPuntaPrecioDia" style="--w:70px">0,108</span> €/kW día
+              </span>
+            </div>
+            <div class="row-right">
+              <span class="redactable" id="pPuntaCantidad" style="--w:92px">18,63€</span>
+              <span class="redactable" id="pPuntaPrecio" style="--w:92px">18,63€</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="row-left">
+              <span class="row-key">P. Valle</span>
+              <span class="row-formula">
+                <span class="redactable" id="pValleKw" style="--w:54px">5,75</span> kW ×
+                <span class="redactable" id="pValleDias" style="--w:44px">30</span> días ×
+                <span class="redactable" id="pVallePrecioDia" style="--w:70px">0,047</span> €/kW día
+              </span>
+            </div>
+            <div class="row-right">
+              <span class="redactable" id="pValleCantidad" style="--w:86px">7,76€</span>
+              <span class="redactable" id="pVallePrecio" style="--w:86px">7,76€</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENERGÍA -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title"><span>ENERGÍA</span></div>
+          <div class="cols-head" style="visibility:hidden" aria-hidden="true">
+            <span>Cantidad</span><span>Precio</span>
+          </div>
+        </div>
+
+        <div class="rows rows--energy">
+          <div class="row">
+            <div class="row-key">P1</div>
+            <div class="energy-mid">
+              <span class="redactable" id="eP1Kwh" style="--w:90px">366,67</span> kWh
+              <span class="pipe">|</span>
+              <span class="redactable" id="eP1Precio" style="--w:100px">0,187375</span> €/kWh
+            </div>
+            <div class="energy-total">
+              <span class="redactable" id="eP1Total" style="--w:92px">68,77€</span>
+            </div>
+          </div>
+
+          <div class="row" id="rowEP2">
+            <div class="row-key">P2</div>
+            <div class="energy-mid">
+              <span class="redactable" id="eP2Kwh" style="--w:90px">327,94</span> kWh
+              <span class="pipe">|</span>
+              <span class="redactable" id="eP2Precio" style="--w:100px">0,187375</span> €/kWh
+            </div>
+            <div class="energy-total">
+              <span class="redactable" id="eP2Total" style="--w:92px">61,42€</span>
+            </div>
+          </div>
+
+          <div class="row" id="rowEP3">
+            <div class="row-key">P3</div>
+            <div class="energy-mid">
+              <span class="redactable" id="eP3Kwh" style="--w:90px">450,74</span> kWh
+              <span class="pipe">|</span>
+              <span class="redactable" id="eP3Precio" style="--w:100px">0,187375</span> €/kWh
+            </div>
+            <div class="energy-total">
+              <span class="redactable" id="eP3Total" style="--w:92px">84,47€</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OTROS CONCEPTOS -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title"><span>OTROS CONCEPTOS</span></div>
+          <div class="cols-head" style="visibility:hidden" aria-hidden="true">
+            <span>Cantidad</span><span>Precio</span>
+          </div>
+        </div>
+
+        <div class="rows rows--simple">
+          <div class="row">
+            <div class="simple-left">Bono social</div>
+            <div class="simple-right"><span class="redactable" id="bonoSocial" style="--w:82px">0,37€</span></div>
+          </div>
+          <div class="row">
+            <div class="simple-left">Alquiler de equipos</div>
+            <div class="simple-right"><span class="redactable" id="alquilerEquipos" style="--w:82px">0,77€</span></div>
+          </div>
+          
+        </div>
+      </div>
+
+      <!-- IMPUESTOS -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title"><span>IMPUESTOS</span></div>
+          <div class="cols-head" style="visibility:hidden" aria-hidden="true">
+            <span>Cantidad</span><span>Precio</span>
+          </div>
+        </div>
+
+        <div class="rows rows--simple">
+          <div class="row">
+            <div class="simple-left">Imp. sobre la electricidad (5,113%)</div>
+            <div class="simple-right"><span class="redactable" id="impElectricidad" style="--w:92px">4,57€</span></div>
+          </div>
+          <div class="row">
+            <div class="simple-left">IVA (21%)</div>
+            <div class="simple-right"><span class="redactable" id="iva" style="--w:92px">15,50€</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="total" aria-label="Total con esta tarifa">
+        <div class="total-box">
+          <span>Total con esta tarifa</span>
+          <span class="amount"><span class="redactable" id="totalConTarifa" style="--w:120px">86,84€</span></span>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+</body>
+</html>
