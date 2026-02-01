@@ -430,8 +430,32 @@
       display: none;
     }
 
-    .pill-left  { column-gap: 12px; }
-    .pill-right { column-gap: 16px; }
+
+    /* Fallback Prince: usa column-gap/row-gap además de gap */
+.pill-left{
+  gap: 12px;
+  column-gap: 12px;
+  row-gap: 12px;
+}
+.pill-right{
+  gap: 16px;
+  column-gap: 16px;
+  row-gap: 16px;
+}
+
+/* También te afecta aquí (tienes gap en savings-bar) */
+.savings-bar{
+  gap: 12px;
+  column-gap: 12px;
+  row-gap: 12px;
+}
+
+/* Si usas gap en otros flex, aplica igual */
+.section-title{
+  gap: 10px;
+  column-gap: 10px;
+  row-gap: 10px;
+}
 
 
     @page { margin: 0; }
