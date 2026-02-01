@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mejóralo · Comparativa</title>
+
   <style>
     :root{
       /* Brand */
@@ -15,16 +16,14 @@
       --ink:#1e2a2f;
       --muted:#7a8790;
       --line:#e8edf0;
-      --soft:#f3f5f7;
-      --soft-2:#f7f9fb;
-      --shadow:0 14px 40px rgba(0,0,0,.10);
       --shadow-soft:0 10px 30px rgba(0,0,0,.08);
-
-      /* Redaction (modo “vacío”) */
-      --redact-blue:#0aa0d8;
     }
 
-    *{box-sizing:border-box}
+    /* ✅ Quitar márgenes de página en PDF */
+    @page { size: A4; margin: 0; }
+
+    *{ box-sizing:border-box; }
+
     body{
       margin:0;
       background:var(--brand-white);
@@ -32,176 +31,130 @@
       font-family: "Dubai","Tw Cen MT","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
     }
 
+    /* ✅ Layout sin flex centrado (Prince-safe) */
     .page{
-      min-height:100vh;
-      padding:28px 16px 40px;
-      display:flex;
-      justify-content:center;
+      padding: 16px 16px 18px; /* menos margen vertical */
     }
-
     .wrap{
-      width:min(940px, 100%);
+      max-width: 940px;
+      margin: 0 auto;
     }
 
     /* Logo */
     .brand{
-      display:flex;
-      justify-content:center;
-      margin:10px 0 18px;
+      display:block;
+      text-align:center;
+      margin: 6px 0 10px;
     }
     .logo{
-      width: 420px;          /* ajusta a tu gusto */
-      height: 90px;          /* ajusta a tu gusto */
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      width: 420px;
+      height: 90px;
+      margin: 0 auto;
+      display:block;
     }
-     /* La imagen se escala sin deformarse y queda centrada */
     .logo-img{
       max-width:100%;
       max-height:100%;
       width:auto;
       height:auto;
       display:block;
-      object-fit:contain;    /* clave: no se deforma */
-    }
-    .logo-word{
-      font-size:58px;
-      font-weight:900;
-      letter-spacing:-1px;
-      color:var(--ink);
-      line-height:1;
-    }
-    .logo-sun{
-      position:relative;
-      width:34px;
-      height:34px;
-      margin-bottom:8px;
-    }
-    .logo-sun::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius:50%;
-      background:var(--brand-orange);
-      filter:saturate(1.05);
-    }
-    .logo-sun i{
-      position:absolute;
-      left:50%;
-      top:50%;
-      width:10px;
-      height:28px;
-      background:var(--brand-orange);
-      border-radius:999px;
-      transform-origin:50% 22px;
-      filter:saturate(1.05);
-    }
-    .logo-sun i:nth-child(1){ transform:translate(-50%,-50%) rotate(0deg); }
-    .logo-sun i:nth-child(2){ transform:translate(-50%,-50%) rotate(45deg); }
-    .logo-sun i:nth-child(3){ transform:translate(-50%,-50%) rotate(90deg); }
-    .logo-sun i:nth-child(4){ transform:translate(-50%,-50%) rotate(135deg); }
-    .logo-sun::after{
-      content:"";
-      position:absolute;
-      inset:8px;
-      border-radius:50%;
-      background:var(--brand-white);
+      object-fit:contain;
+      margin: 0 auto;
     }
 
-    /* Pills */
+    /* ========= META (pills) ========= */
     .meta{
-      display:grid;
-      gap:10px;
-      margin:8px auto 18px;
+      margin: 8px auto 12px;
     }
+    .meta > .pill + .pill{ margin-top: 10px; }
 
-   .pill{
+    /* ✅ Pill table layout (2 columnas estables) */
+    .pill{
       background:linear-gradient(#f7f8fa, #eef1f4);
       border-radius:999px;
-      padding:14px 18px;
+      padding:14px 0; /* padding vertical aquí; horizontal en celdas */
       box-shadow:0 10px 22px rgba(0,0,0,.08);
       overflow:hidden;
 
-      position:relative;
-      display:grid;
-      grid-template-columns:1fr 1fr; /* 50% / 50% exacto */
-      align-items:center;
+      display:table;
+      width:100%;
+      table-layout:fixed;
     }
+    .pill-left,
+    .pill-right{
+      display:table-cell;
+      width:50%;
+      vertical-align:middle;
+      white-space:nowrap;
+    }
+    .pill-left{
+      padding: 0 18px;
+      border-right:1px solid #dfe6ea; /* línea central */
+    }
+    .pill-right{
+      padding: 0 18px;
+    }
+
+    /* Spacing robusto sin gap */
+    .pill-left > *,
+    .pill-right > *{
+      display:inline-block;
+      vertical-align:middle;
+    }
+    .pill-left > * + *{ margin-left:12px; }
+    .pill-right > * + *{ margin-left:16px; }
+
     .pill .label{
       font-size:18px;
       font-weight:600;
       color:var(--ink);
       white-space:nowrap;
     }
-    .pill .divider{
-      width:1px;
-      height:18px;
-      background:#dfe6ea;
-      flex:0 0 auto;
-      opacity:.95;
-    }
-    /* Línea justo en la mitad */
-    .pill::after{
-      content:"";
-      position:absolute;
-      left:50%;
-      top:50%;
-      transform:translate(-50%,-50%);
+    .divider{
+      display:inline-block;
       width:1px;
       height:18px;
       background:#dfe6ea;
       opacity:.95;
-      pointer-events:none;
+      margin: 0 16px;
+      vertical-align:middle;
     }
 
-    /* Contenido pegado a la mitad (para que empiece “desde el centro”) */
-    .pill-left{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding-right:18px;
-      white-space:nowrap;
-      min-width:0;
-    }
-    .pill-right{
-      display:flex;
-      align-items:center;
-      justify-content:flex-start;
-      gap:16px;
-      padding-left:18px;
-      white-space:nowrap;
-      min-width:0;
+    /* ✅ Periodo opcional (si no hay fechas) */
+    body[data-has-period="false"] #pillPeriodo .pill-left{ display:none; }
+    body[data-has-period="false"] #pillPeriodo .pill-right{
+      display:block;           /* ocupa todo */
+      width:100%;
+      padding:0 18px;
+      text-align:center;
     }
 
-    .pipe{
-      color:#9aa6ae;
-      font-weight:900;
-      line-height:1;
-      transform:translateY(1px);
-      flex:0 0 auto;
-    }
-
-    /* Summary block */
+    /* ========= SUMMARY ========= */
     .summary{
       position:relative;
-      margin:10px 0 18px;
+      margin: 6px 0 10px;
     }
+
+    /* ✅ Cards lado a lado con table (sin grid) */
     .cards{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
+      display:table;
+      width:100%;
+      table-layout:fixed;
+      border-collapse:separate;
+      border-spacing:14px 0; /* gap horizontal */
+      margin:0;
     }
     .card{
+      display:table-cell;
+      width:50%;
+      vertical-align:top;
+
       border-radius:18px;
       box-shadow:var(--shadow-soft);
       background:var(--brand-white);
-      padding:24px 22px 30px;
+      padding:20px 20px 26px; /* un poco más compacto */
       border:1px solid #eef2f5;
-      min-height:160px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
+
       text-align:center;
     }
     .card-title{
@@ -217,92 +170,95 @@
       font-size:62px;
       line-height:1;
       letter-spacing:-1px;
+      white-space:nowrap; /* ✅ evita saltos */
     }
-
     .card--right{
       border:2px solid rgba(255,121,0,.35);
       background:linear-gradient(180deg, #fff7ef 0%, #fffaf6 100%);
     }
 
+    /* ✅ Barra naranja sin flex/gap: inline-block + margin */
     .savings-bar{
       position:relative;
       z-index:3;
-      margin:-26px 10px 10px;
+
       background:var(--brand-orange);
       border-radius:999px;
       padding:14px 18px;
       box-shadow:0 14px 34px rgba(255,121,0,.35);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:12px;
+
       text-transform:uppercase;
       color:var(--brand-white);
       letter-spacing:.6px;
       font-weight:900;
-      flex-wrap:wrap;
+
+      margin: 0 10px 6px;
+      transform: translateY(-18px); /* sube sobre cards (más estable que margin negativo en Prince) */
+
+      text-align:center;
+      white-space:nowrap; /* ✅ todo en la misma línea */
     }
-    .savings-label{
-      font-size:18px;
-      opacity:.98;
-      white-space:nowrap;
-    }
+    .savings-label,
     .savings-amount{
-      font-size:38px;
-      line-height:1;
+      display:inline-block;
+      vertical-align:middle;
       white-space:nowrap;
     }
+    .savings-label{ font-size:18px; opacity:.98; }
+    .savings-amount{ font-size:38px; line-height:1; margin-left:14px; }
 
     .annual{
       text-align:center;
-      margin:8px 0 0;
       font-weight:900;
       letter-spacing:.7px;
       text-transform:uppercase;
       color:var(--muted);
       font-size:16px;
+
+      margin:0;
+      transform: translateY(-10px);
     }
     .annual b{ color:var(--ink); }
     .annual .muted{ color:var(--muted); font-weight:900; }
 
-    /* Details */
+    /* ========= DETAILS ========= */
     .details{
-      margin-top:18px;
+      margin-top:10px;
       padding:4px 6px 0;
     }
+    .section{ margin:16px 0 10px; }
 
-    .section{
-      margin:18px 0 10px;
-    }
-
+    /* Section head: sin gap */
     .section-head{
       display:flex;
       align-items:flex-end;
       justify-content:space-between;
-      gap:14px;
       padding:0 6px 6px;
     }
-
     .section-title{
       display:flex;
       align-items:center;
-      gap:10px;
       font-size:22px;
       font-weight:1000;
       letter-spacing:.4px;
     }
-   
+
+    /* Cols head: table (sin grid) */
     .cols-head{
-      display:grid;
-      grid-template-columns: 120px 120px;
-      justify-items:end;
-      gap:26px;
+      display:table;
+      border-collapse:separate;
+      border-spacing:26px 0;
       color:#96a3ab;
       font-weight:1000;
       letter-spacing:.9px;
       text-transform:uppercase;
       font-size:14px;
       padding-right:4px;
+    }
+    .cols-head span{
+      display:table-cell;
+      width:120px;
+      text-align:right;
     }
 
     .rows{
@@ -313,19 +269,17 @@
       padding:0 12px;
     }
 
+    /* Row sin gap */
     .row{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:16px;
       padding:14px 2px;
       border-bottom:1px solid var(--line);
     }
     .row:last-child{ border-bottom:none; }
 
-    .row-left{
-      min-width:0;
-    }
+    .row-left{ min-width:0; margin-right:16px; }
     .row-key{
       font-weight:1000;
       text-transform:uppercase;
@@ -341,23 +295,35 @@
       white-space:nowrap;
     }
 
+    /* Row-right: table (sin grid/gap) */
     .row-right{
-      display:grid;
-      grid-template-columns: 120px 120px;
-      justify-items:end;
-      gap:26px;
+      display:table;
+      border-collapse:separate;
+      border-spacing:26px 0;
       font-weight:1000;
       font-size:20px;
       letter-spacing:.2px;
       flex:0 0 auto;
     }
-
-    /* Energy layout */
-    .rows--energy .row{
-      display:grid;
-      grid-template-columns: 70px 1fr 120px;
-      align-items:center;
+    .row-right > span{
+      display:table-cell;
+      width:120px;
+      text-align:right;
+      white-space:nowrap;
     }
+
+    /* Energy rows: table (sin grid) */
+    .rows--energy .row{
+      display:table;
+      width:100%;
+      table-layout:fixed;
+      padding:14px 2px;
+    }
+    .rows--energy .row > *{
+      display:table-cell;
+      vertical-align:middle;
+    }
+    .rows--energy .row .row-key{ width:70px; }
     .energy-mid{
       color:#39474e;
       font-weight:800;
@@ -366,18 +332,21 @@
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
+      padding-right:10px;
     }
     .energy-total{
-      justify-self:end;
+      width:120px;
+      text-align:right;
       font-weight:1000;
       font-size:20px;
+      white-space:nowrap;
     }
     .pipe{
       opacity:.45;
       margin:0 10px;
     }
 
-    /* Simple list rows (otros / impuestos) */
+    /* Simple list rows */
     .rows--simple .row{
       display:flex;
       justify-content:space-between;
@@ -391,11 +360,12 @@
     .simple-right{
       font-weight:1000;
       font-size:20px;
+      white-space:nowrap;
     }
 
     /* Total */
     .total{
-      margin:18px 6px 0;
+      margin:16px 6px 0;
       display:flex;
       justify-content:flex-end;
     }
@@ -405,98 +375,31 @@
       border-top:2px solid rgba(255,121,0,.55);
       display:flex;
       justify-content:flex-end;
-      gap:12px;
       align-items:baseline;
       color:var(--brand-orange);
       font-weight:1000;
       text-transform:uppercase;
       letter-spacing:.9px;
+      white-space:nowrap;
     }
     .total-box .amount{
       color:var(--ink);
       font-size:24px;
       letter-spacing:.2px;
       text-transform:none;
+      margin-left:12px;
+      white-space:nowrap;
     }
 
-    /* 1) Si NO hay periodo: ocultar bloque Periodo y adaptar pill */
-    body[data-has-period="false"] #periodoGroup { display: none; }
-    body[data-has-period="false"] .pill::after { display: none; }
-    
-
-    /* 2) Si NO hay tramos: ocultar P2 y P3 */
+    /* Tramos: ocultar P2 y P3 */
     body[data-has-tramos="false"] #rowEP2,
-    body[data-has-tramos="false"] #rowEP3 {
-      display: none;
+    body[data-has-tramos="false"] #rowEP3{
+      display:none;
     }
-
-
-
-
-/* ===== PDF FIX: SUMMARY (Prince/DocRaptor) ===== */
-body[data-pdf="true"] .summary{
-  position: relative !important;
-  margin: 6px 0 10px !important; /* menos aire vertical */
-}
-
-/* 1) Cards lado a lado: usa tabla (Prince-safe) */
-body[data-pdf="true"] .cards{
-  display: table !important;
-  width: 100% !important;
-  table-layout: fixed !important;
-
-  /* simula gap horizontal (Prince respeta esto mejor que gap) */
-  border-collapse: separate !important;
-  border-spacing: 14px 0 !important;
-
-  margin: 0 !important;
-}
-
-body[data-pdf="true"] .card{
-  display: table-cell !important;
-  width: 50% !important;
-  vertical-align: top !important;
-
-  min-height: auto !important;        /* quita altura mínima web */
-  padding: 20px 20px 26px !important; /* ajusta altura */
-  margin: 0 !important;
-}
-
-/* Evita que importes se partan o bajen */
-body[data-pdf="true"] .card-value,
-body[data-pdf="true"] .card-value .redactable{
-  white-space: nowrap !important;
-}
-
-/* 2) Barra naranja: en Prince es más estable con transform que con margin negativo */
-body[data-pdf="true"] .savings-bar{
-  margin: 0 10px 6px !important;     /* sin “aire” extra */
-  transform: translateY(-18px) !important; /* sube sobre las cards */
-  z-index: 10 !important;
-  position: relative !important;
-
-  /* asegura una sola línea */
-  flex-wrap: nowrap !important;
-}
-
-body[data-pdf="true"] .savings-label,
-body[data-pdf="true"] .savings-amount{
-  white-space: nowrap !important;
-}
-
-/* 3) Línea “Ahorro anual”: súbela para que quede pegada como en la web */
-body[data-pdf="true"] .annual{
-  margin: 0 !important;
-  transform: translateY(-10px) !important;
-}
-
-
-
-
-</style>
+  </style>
 </head>
 
-<body class="page" data-has-period="true" data-has-tramos="true" data-pdf="true">
+<body class="page" data-has-period="true" data-has-tramos="true">
   <div class="wrap">
 
     <header class="brand">
@@ -507,7 +410,7 @@ body[data-pdf="true"] .annual{
 
     <section class="meta" aria-label="Datos del periodo y potencia">
 
-     <div class="pill">
+      <div class="pill" id="pillPeriodo">
         <div class="pill-left">
           <span id="periodoGroup">
             <span class="label">Periodo:</span>
@@ -532,6 +435,7 @@ body[data-pdf="true"] .annual{
           <span class="redactable" id="potenciaValle" style="--w:86px">5,75 kW</span>
         </div>
       </div>
+
     </section>
 
     <section class="summary" aria-label="Resumen comparativa">
@@ -676,7 +580,6 @@ body[data-pdf="true"] .annual{
             <div class="simple-left">Alquiler de equipos</div>
             <div class="simple-right"><span class="redactable" id="alquilerEquipos" style="--w:82px">0,77€</span></div>
           </div>
-          
         </div>
       </div>
 
