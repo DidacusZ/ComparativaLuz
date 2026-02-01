@@ -433,74 +433,63 @@
 
 
 
-
-  /* ===== PDF OVERRIDES (DocRaptor/Prince) ===== */
-@page { size: A4; margin: 0; }
-
-/* Menos aire vertical en PDF */
-body[data-pdf="true"].page{
-  /* tu .page tenía padding grande y layout centrado */
-  padding: 12px 14px 14px !important;  /* ajusta a gusto */
-  display:block !important;
+/* ===== PDF FIX: SUMMARY (Prince/DocRaptor) ===== */
+body[data-pdf="true"] .summary{
+  position: relative !important;
+  margin: 6px 0 10px !important; /* menos aire vertical */
 }
 
-/* Evita “caja centrada” que crea márgenes laterales visuales */
-body[data-pdf="true"] .wrap{
-  width:100% !important;
-  max-width:none !important;
-}
-
-/* Reduce separaciones verticales */
-body[data-pdf="true"] .brand{ margin: 0 0 10px !important; }
-body[data-pdf="true"] .meta{ margin: 0 auto 10px !important; }
-body[data-pdf="true"] .summary{ margin: 0 0 10px !important; }
-
-/* ---- CARDS lado a lado (sin CSS Grid) ---- */
+/* 1) Cards lado a lado: usa tabla (Prince-safe) */
 body[data-pdf="true"] .cards{
-  display:block !important;
-}
-body[data-pdf="true"] .cards::after{
-  content:"";
-  display:block;
-  clear:both;
+  display: table !important;
+  width: 100% !important;
+  table-layout: fixed !important;
+
+  /* simula gap horizontal (Prince respeta esto mejor que gap) */
+  border-collapse: separate !important;
+  border-spacing: 14px 0 !important;
+
+  margin: 0 !important;
 }
 
-/* 2 columnas por floats: Prince lo respeta muy bien */
-body[data-pdf="true"] .cards .card{
-  float:left !important;
-  width:49% !important;
-  margin:0 !important;
-  min-height:auto !important;   /* quita altura mínima web */
-  padding:18px 18px 22px !important; /* menos alto */
-}
-body[data-pdf="true"] .cards .card:nth-child(2){
-  float:right !important;
+body[data-pdf="true"] .card{
+  display: table-cell !important;
+  width: 50% !important;
+  vertical-align: top !important;
+
+  min-height: auto !important;        /* quita altura mínima web */
+  padding: 20px 20px 26px !important; /* ajusta altura */
+  margin: 0 !important;
 }
 
-/* Evita saltos raros de importes (€/comas) */
+/* Evita que importes se partan o bajen */
 body[data-pdf="true"] .card-value,
 body[data-pdf="true"] .card-value .redactable{
-  white-space:nowrap !important;
+  white-space: nowrap !important;
 }
 
-/* La barra naranja: misma línea siempre */
+/* 2) Barra naranja: en Prince es más estable con transform que con margin negativo */
 body[data-pdf="true"] .savings-bar{
-  margin:-18px 10px 6px !important; /* menos “bajada” */
-  padding:12px 16px !important;
+  margin: 0 10px 6px !important;     /* sin “aire” extra */
+  transform: translateY(-18px) !important; /* sube sobre las cards */
+  z-index: 10 !important;
+  position: relative !important;
+
+  /* asegura una sola línea */
+  flex-wrap: nowrap !important;
 }
+
 body[data-pdf="true"] .savings-label,
 body[data-pdf="true"] .savings-amount{
-  white-space:nowrap !important;
+  white-space: nowrap !important;
 }
 
-/* Ajuste de tipografías/alturas para compactar */
-body[data-pdf="true"] .card-value{ font-size:58px !important; }
-body[data-pdf="true"] .annual{ margin-top:6px !important; }
+/* 3) Línea “Ahorro anual”: súbela para que quede pegada como en la web */
+body[data-pdf="true"] .annual{
+  margin: 0 !important;
+  transform: translateY(-10px) !important;
+}
 
-/* Si quieres compactar aún más el detalle:
-body[data-pdf="true"] .details{ margin-top:10px !important; }
-body[data-pdf="true"] .section{ margin:12px 0 8px !important; }
-*/
 
 
 
