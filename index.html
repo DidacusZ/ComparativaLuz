@@ -431,53 +431,75 @@
     }
 
 
-    /* Fallback Prince: usa column-gap/row-gap además de gap */
-.pill-left{
-  gap: 12px;
-  column-gap: 12px;
-  row-gap: 12px;
-}
-.pill-right{
-  gap: 16px;
-  column-gap: 16px;
-  row-gap: 16px;
+
+
+
+   /* ===== PDF OVERRIDES (Prince-safe) ===== */
+body[data-pdf="true"]{
+  /* evita “centrado en caja” que crea márgenes laterales visuales */
+  display:block !important;
 }
 
-/* También te afecta aquí (tienes gap en savings-bar) */
-.savings-bar{
-  gap: 12px;
-  column-gap: 12px;
-  row-gap: 12px;
+body[data-pdf="true"] .wrap{
+  width:100% !important;
+  max-width:none !important;
 }
 
-/* Si usas gap en otros flex, aplica igual */
-.section-title{
-  gap: 10px;
-  column-gap: 10px;
-  row-gap: 10px;
+body[data-pdf="true"] .meta{
+  width:100% !important;
 }
 
+/* Pills: fuerza 2 columnas reales (tabla) en vez de grid/flex */
+body[data-pdf="true"] .pill{
+  display:table !important;
+  width:100% !important;
+  table-layout:fixed !important;
+}
 
-    @page { margin: 0; }
+body[data-pdf="true"] .pill::after{ display:none !important; } /* quitamos la pseudo línea */
 
-    /* SOLO para el PDF */
-    .page{
-      padding-left: 0 !important;
-      padding-right: 0 !important;
+body[data-pdf="true"] .pill-left,
+body[data-pdf="true"] .pill-right{
+  display:table-cell !important;
+  width:50% !important;
+  vertical-align:middle !important;
+  white-space:nowrap !important;
+}
 
-      /* clave: quitar centrado por flex */
-      display: block !important;
-    }
+/* Línea central real */
+body[data-pdf="true"] .pill-left{
+  border-right:1px solid #dfe6ea !important;
+  padding-right:18px !important;
+}
+body[data-pdf="true"] .pill-right{
+  padding-left:18px !important;
+}
 
-    .wrap{
-      width: 100% !important;
-      max-width: none !important;
-    }
+/* Spacing robusto (sin depender de gap) */
+body[data-pdf="true"] .pill-left > *,
+body[data-pdf="true"] .pill-right > *{
+  display:inline-block !important;
+  vertical-align:middle !important;
+}
+
+body[data-pdf="true"] .pill-left > * + *{ margin-left:12px !important; }
+body[data-pdf="true"] .pill-right > * + *{ margin-left:16px !important; }
+
+/* El separador entre Punta y Valle (tu .divider) con margen fiable */
+body[data-pdf="true"] .divider{
+  display:inline-block !important;
+  width:1px !important;
+  height:18px !important;
+  background:#dfe6ea !important;
+  opacity:.95 !important;
+  margin:0 16px !important;
+}
+
 
 </style>
 </head>
 
-<body class="page" data-has-period="true" data-has-tramos="true">
+<body class="page" data-has-period="true" data-has-tramos="true" data-pdf="true">
   <div class="wrap">
 
     <header class="brand">
