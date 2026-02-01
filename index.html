@@ -430,15 +430,21 @@
       display: none;
     }
 
-    @page 
-    {
-      margin: 0;
+    @page { size: A4; margin: 0; }
+
+    /* SOLO para el PDF */
+    .page{
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+
+      /* clave: quitar centrado por flex */
+      display: block !important;
     }
 
-    .page{
-  padding:28px 100 40px; /* sin padding lateral */
-}
-
+    .wrap{
+      width: 100% !important;
+      max-width: none !important;
+    }
 
 </style>
 </head>
